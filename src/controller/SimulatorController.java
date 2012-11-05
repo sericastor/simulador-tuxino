@@ -42,26 +42,38 @@ public class SimulatorController {
         //Variables para comparar fechas entre instrucciones
         String[] strAnt;
         String[] strSig;
-        //Recorrer el arreglo usando los valores correctos
+        
+        /*USAR EN CASO DE FORMATO DE FECHA yyyy:mm:dd:hh:mm:ss
+         //Recorrer el arreglo usando los valores correctos
+         for (int i = 0; i < strSinSalto.length - 1; i++) {
+         //Movimiento anterior
+         strAnt = strSinSalto[i].split(",");
+         strSig = strSinSalto[i + 1].split(",");
+         //Split de fecha para calcular la diferencia de segundos entre instrucciones
+         String[] strFecAnt;
+         String[] strFecSig;
+         //Fraccionar por yyyy-mm-dd-hh-mm-ss
+         strFecAnt = strAnt[0].split(":");
+         strFecSig = strSig[0].split(":");
+         //Pasar a fecha
+         java.util.Date fechaAnt = new java.util.Date(Integer.parseInt(strFecAnt[0]), Integer.parseInt(strFecAnt[1]), Integer.parseInt(strFecAnt[2]), Integer.parseInt(strFecAnt[3]), Integer.parseInt(strFecAnt[4]), Integer.parseInt(strFecAnt[5]));
+         java.util.Date fechaSig = new java.util.Date(Integer.parseInt(strFecSig[0]), Integer.parseInt(strFecSig[1]), Integer.parseInt(strFecSig[2]), Integer.parseInt(strFecSig[3]), Integer.parseInt(strFecSig[4]), Integer.parseInt(strFecSig[5]));
+         //Calcular la diferencia de fechas
+         int segundos = getDiferencia(fechaAnt, fechaSig);
+         eventos.add(new Move(strAnt[0], strAnt[1], strAnt[2], String.valueOf(segundos)));
+         System.out.println(strAnt[0] + "-" + strAnt[1] + "-" + strAnt[2] + "----");
+
+         }
+         */
+
+        //USAR PARA FORMATO UNIX (  EPOCH  )
         for (int i = 0; i < strSinSalto.length - 1; i++) {
-            //Movimiento anterior
             strAnt = strSinSalto[i].split(",");
             strSig = strSinSalto[i + 1].split(",");
-            //Split de fecha para calcular la diferencia de segundos entre instrucciones
-            String[] strFecAnt;
-            String[] strFecSig;
-            //Fraccionar por yyyy-mm-dd-hh-mm-ss
-            strFecAnt = strAnt[0].split(":");
-            strFecSig = strSig[0].split(":");
-            //Pasar a fecha
-            java.util.Date fechaAnt = new java.util.Date(Integer.parseInt(strFecAnt[0]), Integer.parseInt(strFecAnt[1]), Integer.parseInt(strFecAnt[2]), Integer.parseInt(strFecAnt[3]), Integer.parseInt(strFecAnt[4]), Integer.parseInt(strFecAnt[5]));
-            java.util.Date fechaSig = new java.util.Date(Integer.parseInt(strFecSig[0]), Integer.parseInt(strFecSig[1]), Integer.parseInt(strFecSig[2]), Integer.parseInt(strFecSig[3]), Integer.parseInt(strFecSig[4]), Integer.parseInt(strFecSig[5]));
-            //Calcular la diferencia de fechas
-            int segundos = getDiferencia(fechaAnt, fechaSig);
+            int segundos = Integer.parseInt(strSig[0]) - Integer.parseInt(strAnt[0]);
             eventos.add(new Move(strAnt[0], strAnt[1], strAnt[2], String.valueOf(segundos)));
-            System.out.println(strAnt[0] + "-" + strAnt[1] + "-" + strAnt[2] + "----");
-
         }
+
         //Asignar el valor del tiempo de la última instruccion (Debido a que no hay siguiente). Valor por defecto 1 segundo
         strAnt = strSinSalto[strSinSalto.length - 1].split(",");
         eventos.add(new Move(strAnt[0], strAnt[1], strAnt[2], "1"));
@@ -92,6 +104,5 @@ public class SimulatorController {
         int segundos = diferenciaMils / 1000;
         return segundos;
     }
-    
     public static ArrayList<Move> eventos = new ArrayList<Move>();
 }
